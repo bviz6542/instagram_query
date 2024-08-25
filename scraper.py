@@ -25,7 +25,7 @@ class Scraper():
             time.sleep(7)
             self.main_user = self.local_service.read_user_credentials().username
 
-    def main_user_profile(self):
+    def user_profile(self):
         self.browser_service.load_user_profile_page(username=self.main_user)
         try:
             friends_count = self.browser_service.fetch_friends_count()

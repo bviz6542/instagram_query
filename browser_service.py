@@ -10,6 +10,9 @@ from typing import List, Dict, Any
 from user_credentials import UserCredentials
 from friends_count import FriendsCount
 
+import time
+import csv
+
 class BrowserService():
     def __init__(self) -> None:
         self.driver = webdriver.Chrome(service=Service('/opt/homebrew/bin/chromedriver'))
@@ -50,6 +53,16 @@ class BrowserService():
             .until(EC.visibility_of_element_located((By.XPATH, "//a[contains(@href, '/following')]/span"))).text
         return FriendsCount(followers_count=int(followers_count), followings_count=int(followings_count))
     
+    def press_followers(self):
+        WebDriverWait(self.driver, 10)\
+            .until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, '/followers')]")))\
+            .click()
+
+    def press_followings(self):
+        WebDriverWait(self.driver, 10)\
+            .until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@href, '/following')]")))\
+            .click()
+
     def tab_action(self, times):
         for i in range(times):
             ActionChains(self.driver)\
@@ -70,3 +83,50 @@ class BrowserService():
             ActionChains(self.driver)\
                 .key_up(Keys.SHIFT)\
                 .perform()
+
+    def scroll_followers_list(self):
+        try:
+            dialog = WebDriverWait(self.driver, 15).until(
+                EC.presence_of_element_located((By.XPATH, "//div[@role='dialog']"))
+            )
+            print("Followers dialog is visible.")
+        except:
+            print("Error: Followers dialog did not appear.")
+            return
+
+        try:
+            scrollable_container = self.driver.find_element(By.XPATH, "/html/body/div[6]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[3]")
+            print("Scrollable container found.")
+        except:
+            print("Error: Scrollable container not found with the provided XPath.")
+            return
+
+        prev_height = 0
+        scroll_attempts = 0
+        max_scroll_attempts = 5
+
+        while True:
+            self.driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", scrollable_container)
+            time.sleep(2)
+
+            curr_height = self.driver.execute_script("return arguments[0].scrollHeight", scrollable_container)
+            print(f"Scrolled to height: {curr_height}")
+
+            if curr_height == prev_height:
+                scroll_attempts += 1
+                if scroll_attempts >= max_scroll_attempts:
+                    print("No new followers loaded after several attempts. Ending scroll.")
+                    break
+            else:
+                scroll_attempts = 0
+
+            prev_height = curr_height
+            
+        try:
+            follower_elements = scrollable_container.find_elements(By.XPATH, ".//a[contains(@href, '/')]/span")
+            followers = [elem.text for elem in follower_elements if elem.text]
+            print(f"Total Followers Found: {len(followers)}")
+            for follower in followers:
+                print(follower)
+        except:
+            print("Error: Unable to extract follower usernames.")

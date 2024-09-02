@@ -27,7 +27,7 @@ class Scraper():
             time.sleep(7)
             self.username = self.local_service.read_user_credentials().username
 
-    def user_profile(self):
+    def go_to_user_profile(self):
         self.browser_service.load_user_profile_page(username=self.username)
         try:
             friends_count = self.browser_service.fetch_friends_count()
@@ -36,8 +36,18 @@ class Scraper():
         except Exception as e:
             return
     
-    def followers(self, exhaustlimit = 500):
+    def go_to_followers(self, exhaustlimit = 500):
         self.browser_service.press_followers()
         time.sleep(3)
         self.browser_service.scroll_followers_list(callback=self.local_service.write_followers_to_csv)
         self.data_cleaner.clean_data()
+        
+    def get_back_to_user_profile(self):
+        self.browser_service.load_user_profile_page(username=self.username)
+        
+    def go_to_followings(self, exhaustlimit = 500):
+        # self.browser_service.press_followers()
+        # time.sleep(3)
+        # self.browser_service.scroll_followers_list(callback=self.local_service.write_followers_to_csv)
+        # self.data_cleaner.clean_data()
+        pass

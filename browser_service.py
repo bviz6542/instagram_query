@@ -86,15 +86,7 @@ class BrowserService():
 
     def scroll_followers_list(self):
         try:
-            dialog = WebDriverWait(self.driver, 15).until(
-                EC.presence_of_element_located((By.XPATH, "//div[@role='dialog']"))
-            )
-            print("Followers dialog is visible.")
-        except:
-            print("Error: Followers dialog did not appear.")
-            return
-
-        try:
+            # Find the scrollable container using the provided XPath
             scrollable_container = self.driver.find_element(By.XPATH, "/html/body/div[6]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[3]")
             print("Scrollable container found.")
         except:
@@ -121,12 +113,37 @@ class BrowserService():
                 scroll_attempts = 0
 
             prev_height = curr_height
-            
+
+        # Wait briefly to ensure all elements are loaded
+        time.sleep(2)
+
+        # Attempt to extract follower elements
         try:
-            follower_elements = scrollable_container.find_elements(By.XPATH, ".//a[contains(@href, '/')]/span")
-            followers = [elem.text for elem in follower_elements if elem.text]
-            print(f"Total Followers Found: {len(followers)}")
-            for follower in followers:
-                print(follower)
-        except:
-            print("Error: Unable to extract follower usernames.")
+            followers_info = []
+
+            # Adjust the XPath based on observed HTML structure
+            follower_divs = scrollable_container.find_elements(By.XPATH, ".//div[contains(@class, 'x9f619') and contains(@class, 'xjbqb8w')]")
+            
+            if not follower_divs:
+                print("No follower elements found within the scrollable container.")
+                return
+
+            for follower_div in follower_divs:
+                try:
+                    user_id_elem = follower_div.find_element(By.XPATH, ".//a/div/div/span")
+                    username_elem = follower_div.find_element(By.XPATH, ".//span/span")
+
+                    user_id = user_id_elem.text if user_id_elem else "No User ID"
+                    username = username_elem.text if username_elem else "No Username"
+
+                    followers_info.append({"user_id": user_id, "username": username})
+                except Exception as e:
+                    print(f"Error extracting user info: {str(e)}")
+                    continue
+
+            print(f"Total Followers Found: {len(followers_info)}")
+            for follower in followers_info:
+                print(f"User ID: {follower['user_id']}, Username: {follower['username']}")
+
+        except Exception as e:
+            print(f"Error: Unable to extract follower information. {str(e)}")

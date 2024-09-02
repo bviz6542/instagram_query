@@ -84,10 +84,8 @@ class BrowserService():
                 .perform()
 
     def scroll_followers_list(self, callback=None):
-        try:
-            # Find the scrollable container using the provided XPath
+        try: 
             scrollable_container = self.driver.find_element(By.XPATH, "/html/body/div[6]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[3]")
-            print("Scrollable container found.")
         except:
             print("Error: Scrollable container not found with the provided XPath.")
             return
@@ -101,7 +99,6 @@ class BrowserService():
             time.sleep(2)
 
             curr_height = self.driver.execute_script("return arguments[0].scrollHeight", scrollable_container)
-            print(f"Scrolled to height: {curr_height}")
 
             if curr_height == prev_height:
                 scroll_attempts += 1

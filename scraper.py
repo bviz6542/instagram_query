@@ -1,11 +1,13 @@
 import time
 from browser_service import BrowserService
 from local_service import LocalService
+from data_cleaner import DataCleaner
 
 class Scraper():
     def __init__(self):
         self.browser_service = BrowserService()
         self.local_service = LocalService()
+        self.data_cleaner = DataCleaner()
         self.username = ""
 
     def login(self):       
@@ -38,3 +40,4 @@ class Scraper():
         self.browser_service.press_followers()
         time.sleep(3)
         self.browser_service.scroll_followers_list(callback=self.local_service.write_followers_to_csv)
+        self.data_cleaner.clean_data()

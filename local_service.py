@@ -1,5 +1,6 @@
 import os
 import json
+import csv
 from typing import List, Dict, Any, Optional
 from user_credentials import UserCredentials
 from friends_count import FriendsCount
@@ -42,3 +43,14 @@ class LocalService():
     def save_friends_count(self, friends_count: FriendsCount) -> None:
         with open("./data/friends_count.json", "w") as jsonfile:
             json.dump(friends_count.to_dict(), jsonfile)
+
+    def write_followers_to_csv(self, followers_info, filename="followers_list.csv"):
+        output_file = os.path.join("data", filename)
+        try:
+            with open(output_file, mode='w', newline='', encoding='utf-8') as file:
+                writer = csv.DictWriter(file, fieldnames=["user_id", "username"])
+                writer.writeheader()
+                writer.writerows(followers_info)
+            print(f"Followers information saved to {os.path.abspath(output_file)}")
+        except Exception as e:
+            print(f"Error writing to CSV: {str(e)}")

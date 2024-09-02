@@ -11,7 +11,6 @@ from user_credentials import UserCredentials
 from friends_count import FriendsCount
 
 import time
-import csv
 
 class BrowserService():
     def __init__(self) -> None:
@@ -84,7 +83,7 @@ class BrowserService():
                 .key_up(Keys.SHIFT)\
                 .perform()
 
-    def scroll_followers_list(self):
+    def scroll_followers_list(self, callback=None):
         try:
             # Find the scrollable container using the provided XPath
             scrollable_container = self.driver.find_element(By.XPATH, "/html/body/div[6]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[3]")
@@ -96,7 +95,7 @@ class BrowserService():
         prev_height = 0
         scroll_attempts = 0
         max_scroll_attempts = 5
-
+        
         while True:
             self.driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", scrollable_container)
             time.sleep(2)
@@ -114,14 +113,10 @@ class BrowserService():
 
             prev_height = curr_height
 
-        # Wait briefly to ensure all elements are loaded
         time.sleep(2)
 
-        # Attempt to extract follower elements
         try:
             followers_info = []
-
-            # Adjust the XPath based on observed HTML structure
             follower_divs = scrollable_container.find_elements(By.XPATH, ".//div[contains(@class, 'x9f619') and contains(@class, 'xjbqb8w')]")
             
             if not follower_divs:
@@ -141,9 +136,8 @@ class BrowserService():
                     print(f"Error extracting user info: {str(e)}")
                     continue
 
-            print(f"Total Followers Found: {len(followers_info)}")
-            for follower in followers_info:
-                print(f"User ID: {follower['user_id']}, Username: {follower['username']}")
+            if callback:
+                callback(followers_info)   
 
         except Exception as e:
             print(f"Error: Unable to extract follower information. {str(e)}")

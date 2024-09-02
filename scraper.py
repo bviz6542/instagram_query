@@ -37,4 +37,4 @@ class Scraper():
     def followers(self, exhaustlimit = 500):
         self.browser_service.press_followers()
         time.sleep(3)
-        self.browser_service.scroll_followers_list()
+        self.browser_service.scroll_followers_list(callback=self.local_service.write_followers_to_csv)

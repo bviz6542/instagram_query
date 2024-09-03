@@ -1,5 +1,10 @@
 @baseURL = http://localhost:8000
 
-### 멤버 테스트
-GET {{baseURL}}/members/
+### 회원가입
+POST {{baseURL}}/members/
 Content-Type: application/json
+
+{
+    "username": "firstMember",
+    "password": "firstPwd"
+}

@@ -5,6 +5,6 @@ POST {{baseURL}}/members/
 Content-Type: application/json
 
 {
-    "username": "firstMember",
+    "username": "secondMember",
     "password": "firstPwd"
 }

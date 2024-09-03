@@ -6,8 +6,8 @@
 
 # source ../venv-instagram-query/bin/activate
 
-# pip install fastapi "uvicorn[standard]" pydantic-settings redis bcrypt sqlalchemy psycopg2-binary
+# pip install fastapi "uvicorn[standard]" pydantic-settings redis bcrypt sqlalchemy psycopg2-binary asyncpg greenlet
 
-export PYTHONPATH=/Users/jeongjun-u/Documents/GitHub/instagram_query
+export PYTHONPATH=..
 
 uvicorn main:app --reload

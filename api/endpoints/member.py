@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from api.schemas.member import MemberCreate
-from api.infras.session import get_db
+from api.infras.postgresql import get_db
 from api.services.member_service import create_member
 
 router = APIRouter()

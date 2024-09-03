@@ -1,0 +1,16 @@
+@baseURL = http://localhost:8000
+@authToken = Bearer 822ad5c8-2448-4d39-94a2-55bddfe0c76f
+
+### 로그인
+POST {{baseURL}}/auth/login/
+Content-Type: application/json
+
+{
+    "username": "secondMember",
+    "password": "firstPwd"
+}
+
+### 로그아웃
+DELETE {{baseURL}}/auth/logout/
+Content-Type: application/json
+Authorization: {{authToken}}

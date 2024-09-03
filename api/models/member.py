@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.sql import func
-from api.infras.session import Base
+from api.infras.postgresql import Base
 
 class MemberModel(Base):
     __tablename__ = "member"

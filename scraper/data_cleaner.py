@@ -1,9 +1,15 @@
 import pandas as pd
 
 class DataCleaner:
-    def clean_data(self):
+    def clean_followers_data(self):
+        self.clean_data('data/followers_list.csv')
+        
+    def clean_followings_data(self):
+        self.clean_data('data/followings_list.csv')
+        
+    def clean_data(self, file_path: str):
         try:
-            df = pd.read_csv('data/followers_list.csv')
+            df = pd.read_csv(f'{file_path}')
             df = df.drop_duplicates()
             df['username'] = df['username'].replace('', pd.NA)
             df['username'] = df['username'].fillna(df['user_id'])

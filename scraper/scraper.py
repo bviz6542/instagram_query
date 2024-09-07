@@ -36,18 +36,18 @@ class Scraper():
         except Exception as e:
             return
     
-    def go_to_followers(self, exhaustlimit = 500):
+    def go_to_followers(self):
         self.browser_service.press_followers()
         time.sleep(3)
         self.browser_service.scroll_followers_list(callback=self.local_service.write_followers_to_csv)
-        self.data_cleaner.clean_data()
+        self.data_cleaner.clean_followers_data()
         
     def get_back_to_user_profile(self):
         self.browser_service.load_user_profile_page(username=self.username)
+        time.sleep(2)
         
-    def go_to_followings(self, exhaustlimit = 500):
-        # self.browser_service.press_followers()
-        # time.sleep(3)
-        # self.browser_service.scroll_followers_list(callback=self.local_service.write_followers_to_csv)
-        # self.data_cleaner.clean_data()
-        pass
+    def go_to_followings(self):
+        self.browser_service.press_followings()
+        time.sleep(3)
+        self.browser_service.scroll_followings_list(callback=self.local_service.write_followings_to_csv)
+        self.data_cleaner.clean_followings_data()

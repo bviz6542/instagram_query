@@ -84,6 +84,12 @@ class BrowserService():
                 .perform()
 
     def scroll_followers_list(self, callback=None):
+        self.scroll_list(callback=callback)
+    
+    def scroll_followings_list(self, callback=None):
+        self.scroll_list(callback=callback)
+            
+    def scroll_list(self, callback):
         try: 
             scrollable_container = self.driver.find_element(By.XPATH, "/html/body/div[6]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[3]")
         except:
@@ -103,7 +109,7 @@ class BrowserService():
             if curr_height == prev_height:
                 scroll_attempts += 1
                 if scroll_attempts >= max_scroll_attempts:
-                    print("No new followers loaded after several attempts. Ending scroll.")
+                    print("No new loaded after several attempts. Ending scroll.")
                     break
             else:
                 scroll_attempts = 0
@@ -113,28 +119,28 @@ class BrowserService():
         time.sleep(2)
 
         try:
-            followers_info = []
-            follower_divs = scrollable_container.find_elements(By.XPATH, ".//div[contains(@class, 'x9f619') and contains(@class, 'xjbqb8w')]")
+            info = []
+            info_divs = scrollable_container.find_elements(By.XPATH, ".//div[contains(@class, 'x9f619') and contains(@class, 'xjbqb8w')]")
             
-            if not follower_divs:
-                print("No follower elements found within the scrollable container.")
+            if not info_divs:
+                print("No elements found within the scrollable container.")
                 return
 
-            for follower_div in follower_divs:
+            for info_div in info_divs:
                 try:
-                    user_id_elem = follower_div.find_element(By.XPATH, ".//a/div/div/span")
-                    username_elem = follower_div.find_element(By.XPATH, ".//span/span")
+                    user_id_elem = info_div.find_element(By.XPATH, ".//a/div/div/span")
+                    username_elem = info_div.find_element(By.XPATH, ".//span/span")
 
                     user_id = user_id_elem.text if user_id_elem else "No User ID"
                     username = username_elem.text if username_elem else "No Username"
 
-                    followers_info.append({"user_id": user_id, "username": username})
+                    info.append({"user_id": user_id, "username": username})
                 except Exception as e:
                     print(f"Error extracting user info: {str(e)}")
                     continue
 
             if callback:
-                callback(followers_info)   
-
+                callback(info)
+                 
         except Exception as e:
-            print(f"Error: Unable to extract follower information. {str(e)}")
+            print(f"Error: Unable to extract information. {str(e)}")

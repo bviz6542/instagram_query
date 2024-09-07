@@ -44,13 +44,19 @@ class LocalService():
         with open("./data/friends_count.json", "w") as jsonfile:
             json.dump(friends_count.to_dict(), jsonfile)
 
-    def write_followers_to_csv(self, followers_info, filename="followers_list.csv"):
+    def write_followers_to_csv(self, followers_info):
+        self.write_to_csv(info=followers_info, filename="followers_list.csv")
+            
+    def write_followings_to_csv(self, followings_info):
+        self.write_to_csv(info=followings_info, filename="followings_list.csv")
+            
+    def write_to_csv(info, filename): 
         output_file = os.path.join("data", filename)
         try:
             with open(output_file, mode='w', newline='', encoding='utf-8') as file:
                 writer = csv.DictWriter(file, fieldnames=["user_id", "username"])
                 writer.writeheader()
-                writer.writerows(followers_info)
-            print(f"Followers information saved to {os.path.abspath(output_file)}")
+                writer.writerows(info)
+            print(f"Information saved to {os.path.abspath(output_file)}")
         except Exception as e:
             print(f"Error writing to CSV: {str(e)}")

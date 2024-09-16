@@ -9,6 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from typing import List, Dict, Any
 from user_credentials import UserCredentials
 from friends_count import FriendsCount
+from scrollable_information import ScrollableInformation
 
 import time
 
@@ -84,14 +85,18 @@ class BrowserService():
                 .perform()
 
     def scroll_followers_list(self, callback=None):
-        self.scroll_list(callback=callback)
+        self.scroll_list(scrollable_information=ScrollableInformation.FOLLOWERS, callback=callback)
     
     def scroll_followings_list(self, callback=None):
-        self.scroll_list(callback=callback)
+        self.scroll_list(scrollable_information=ScrollableInformation.FOLLOWINGS, callback=callback)
             
-    def scroll_list(self, callback):
+    def scroll_list(self, scrollable_information , callback):
         try: 
-            scrollable_container = self.driver.find_element(By.XPATH, "/html/body/div[6]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[3]")
+            if scrollable_information == ScrollableInformation.FOLLOWERS:
+                scrollable_container = self.driver.find_element(By.XPATH, "/html/body/div[6]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[3]")
+            else:
+                scrollable_container = self.driver.find_element(By.XPATH, "/html/body/div[6]/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[4]")
+            
         except:
             print("Error: Scrollable container not found with the provided XPath.")
             return
@@ -121,6 +126,7 @@ class BrowserService():
         try:
             info = []
             info_divs = scrollable_container.find_elements(By.XPATH, ".//div[contains(@class, 'x9f619') and contains(@class, 'xjbqb8w')]")
+            time.sleep(0.5)
             
             if not info_divs:
                 print("No elements found within the scrollable container.")

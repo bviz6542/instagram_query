@@ -50,7 +50,7 @@ class LocalService():
     def write_followings_to_csv(self, followings_info):
         self.write_to_csv(info=followings_info, filename="followings_list.csv")
             
-    def write_to_csv(info, filename): 
+    def write_to_csv(self, info, filename): 
         output_file = os.path.join("data", filename)
         try:
             with open(output_file, mode='w', newline='', encoding='utf-8') as file:

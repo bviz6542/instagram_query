@@ -1,7 +1,7 @@
 import time
 from browser_service import BrowserService
 from local_service import LocalService
-from data_cleaner import DataHandler
+from data_handler import DataHandler
 
 class Scraper():
     def __init__(self):

@@ -1,13 +1,13 @@
 import time
 from browser_service import BrowserService
 from local_service import LocalService
-from data_cleaner import DataCleaner
+from data_cleaner import DataHandler
 
 class Scraper():
     def __init__(self):
         self.browser_service = BrowserService()
         self.local_service = LocalService()
-        self.data_cleaner = DataCleaner()
+        self.data_cleaner = DataHandler()
         self.username = ""
 
     def login(self):       

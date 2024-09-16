@@ -1,7 +1,7 @@
 import pandas as pd
 from pandas import DataFrame
 
-class DataCleaner:
+class DataHandler:
     def clean_followers_data(self):
         self.clean_data('data/followers_list.csv')
         

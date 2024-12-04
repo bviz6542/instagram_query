@@ -51,3 +51,5 @@ class Scraper():
         time.sleep(3)
         self.browser_service.scroll_followings_list(callback=self.local_service.write_followings_to_csv)
         self.data_cleaner.clean_followings_data()
+
+        

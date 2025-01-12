@@ -5,6 +5,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 from typing import List, Dict, Any
 from user_credentials import UserCredentials
@@ -15,7 +16,7 @@ import time
 
 class BrowserService():
     def __init__(self) -> None:
-        self.driver = webdriver.Chrome(service=Service('/opt/homebrew/bin/chromedriver'))
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         
     def load_login_page(self):
         self.driver.get("https://www.instagram.com/")
